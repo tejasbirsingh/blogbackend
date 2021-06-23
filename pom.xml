@@ -157,7 +157,7 @@
                 <configuration>
                   <archive>
                     <manifest>                   
-                    
+                      <mainClass>com.trainingproject.backend.Backend</mainClass>
                     </manifest>
                   </archive>
                 </configuration>
