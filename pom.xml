@@ -159,7 +159,7 @@
                 <configuration>
                   <archive>
                     <manifest>                   
-                      <mainClass>com.trainingproject.backend.Backend</mainClass>
+                      <mainClass>com.trainingproject.backend.BackendApplication</mainClass>
                     </manifest>
                   </archive>
                 </configuration>
