@@ -7,7 +7,8 @@ import java.util.List;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.trainingproject.backend.dto.CommentsDto;
+import com.trainingproject.backend.dto.CommentRequest;
+import com.trainingproject.backend.dto.CommentResponse;
 import com.trainingproject.backend.exceptions.PostNotFoundException;
 import com.trainingproject.backend.mapper.CommentMapper;
 import com.trainingproject.backend.model.Comment;
@@ -32,10 +33,11 @@ public class CommentService {
 	private final MailContentBuilder mailContentBuilder;
 	private final MailService mailService;
 
-	public void save(CommentsDto commentsDto) {
+	public void save(CommentRequest commentsDto) {
 		Post post = postRepository.findById(commentsDto.getPostId())
 				.orElseThrow(() -> new PostNotFoundException(commentsDto.getPostId().toString()));
 		Comment comment = commentMapper.map(commentsDto, post, authService.getCurrentUser());
+		comment.setVoteCount(0);
 		commentRepository.save(comment);
 
 		String message = mailContentBuilder
@@ -48,13 +50,20 @@ public class CommentService {
 				new NotificationEmail(user.getUsername() + " Commented on your post", user.getEmail(), message));
 	}
 
-	public List<CommentsDto> getAllCommentsForPost(Long postId) {
+	public List<CommentResponse> getAllCommentsForPost(Long postId) {
 		Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(postId.toString()));
 		return commentRepository.findByPost(post).stream().map(commentMapper::mapToDto).collect(toList());
 	}
 
-	public List<CommentsDto> getAllCommentsForUser(String userName) {
+	public List<CommentResponse> getAllCommentsForUser(String userName) {
 		User user = userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException(userName));
 		return commentRepository.findAllByUser(user).stream().map(commentMapper::mapToDto).collect(toList());
 	}
+
+	public CommentResponse getComment(Long id) {
+		Comment comment = commentRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id.toString()));
+		return commentMapper.mapToDto(comment);
+
+	}
+
 }

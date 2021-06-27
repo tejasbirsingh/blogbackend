@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.trainingproject.backend.dto.CommentsDto;
+import com.trainingproject.backend.dto.CommentRequest;
+import com.trainingproject.backend.dto.CommentResponse;
 import com.trainingproject.backend.service.CommentService;
 
 import lombok.AllArgsConstructor;
@@ -22,24 +23,27 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/api/comments/")
 @AllArgsConstructor
 public class CommentsController {
-    private  CommentService commentService;
+	private CommentService commentService;
 
-    @PostMapping
-    public ResponseEntity<Void> createComment(@RequestBody CommentsDto commentsDto) {
-        commentService.save(commentsDto);
-        return new ResponseEntity<>(CREATED);
-    }
+	@PostMapping
+	public ResponseEntity<Void> createComment(@RequestBody CommentRequest commentsDto) {
+		commentService.save(commentsDto);
+		return new ResponseEntity<>(CREATED);
+	}
 
-    @GetMapping("/by-post/{postId}")
-    public ResponseEntity<List<CommentsDto>> getAllCommentsForPost(@PathVariable Long postId) {
-        return ResponseEntity.status(OK)
-                .body(commentService.getAllCommentsForPost(postId));
-    }
+	@GetMapping("/by-post/{postId}")
+	public ResponseEntity<List<CommentResponse>> getAllCommentsForPost(@PathVariable Long postId) {
+		return ResponseEntity.status(OK).body(commentService.getAllCommentsForPost(postId));
+	}
 
-    @GetMapping("/by-user/{userName}")
-    public ResponseEntity<List<CommentsDto>> getAllCommentsForUser(@PathVariable String userName){
-        return ResponseEntity.status(OK)
-                .body(commentService.getAllCommentsForUser(userName));
-    }
+	@GetMapping("/by-user/{userName}")
+	public ResponseEntity<List<CommentResponse>> getAllCommentsForUser(@PathVariable String userName) {
+		return ResponseEntity.status(OK).body(commentService.getAllCommentsForUser(userName));
+	}
+
+	@GetMapping("/{commentId}")
+	public ResponseEntity<CommentResponse> getComment(@PathVariable Long commentId) {
+		return ResponseEntity.status(OK).body(commentService.getComment(commentId));
+	}
 
 }

@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import com.trainingproject.backend.config.SwaggerConfiguration;
 
 @SpringBootApplication
-
 @EnableAsync
 @Import(SwaggerConfiguration.class)
 public class BackendApplication {

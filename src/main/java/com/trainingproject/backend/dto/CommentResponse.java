@@ -9,12 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentsDto {
+public class CommentResponse {
 	private Long id;
 	private Long postId;
 	private Instant createdDate;
 	private String text;
 	private String userName;
 	private Integer voteCount;
-
+	private boolean upVote;
+	private boolean downVote;
 }
